@@ -2,10 +2,10 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { use } from 'react';
 import Link from 'next/link';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { use } from 'react';
 
 const ProductDetails = ({ params }) => {
     const router = useRouter();
@@ -15,6 +15,7 @@ const ProductDetails = ({ params }) => {
     const [loading, setLoading] = useState(true);
     const [cart, setCart] = useState([]);
 
+    // Fetch Product Details
     useEffect(() => {
         const fetchProduct = async () => {
             try {
@@ -31,22 +32,23 @@ const ProductDetails = ({ params }) => {
         if (id) fetchProduct();
     }, [id]);
 
+    // Load Cart from Local Storage on Mount
     useEffect(() => {
         const existingCart = JSON.parse(localStorage.getItem('cart')) || [];
         setCart(existingCart);
     }, []);
 
+    // Add to Cart Function
     const addToCart = (product) => {
-        const storedCart = JSON.parse(localStorage.getItem('cart')) || [];
-    
+        let storedCart = JSON.parse(localStorage.getItem('cart')) || [];
+
         const existingProduct = storedCart.find(item => item.id === product.id);
-    
+
         if (existingProduct) {
-            const updatedCart = storedCart.map(item =>
+            storedCart = storedCart.map(item =>
                 item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
             );
-            localStorage.setItem('cart', JSON.stringify(updatedCart));
-            toast.info('Quantity updated in cart!');
+            toast.info(`${product.title} quantity updated in cart!`);
         } else {
             const sanitizedProduct = {
                 id: product.id,
@@ -55,13 +57,14 @@ const ProductDetails = ({ params }) => {
                 images: product.images,
                 quantity: 1
             };
-    
-            const updatedCart = [...storedCart, sanitizedProduct];
-            localStorage.setItem('cart', JSON.stringify(updatedCart));
-            toast.success('Item added to cart!');
+            storedCart.push(sanitizedProduct);
+            toast.success(`${product.title} added to cart!`);
         }
+
+        localStorage.setItem('cart', JSON.stringify(storedCart));
+        setCart(storedCart); // Update state to reflect changes immediately
     };
-    
+
     if (loading) return <p className="text-center text-gray-500">Loading product details...</p>;
     if (!product) return <p className="text-center text-red-500">Product not found.</p>;
 
@@ -101,7 +104,7 @@ const ProductDetails = ({ params }) => {
 
                     <Link href="/cart">
                         <button className="mt-4 ml-4 bg-green-600 text-white px-4 py-2 rounded-md font-bold hover:bg-green-700 transition">
-                            View Cart 🛒 ({cart.length})
+                            View Cart 🛒 ({cart.reduce((total, item) => total + item.quantity, 0)})
                         </button>
                     </Link>
                 </div>
