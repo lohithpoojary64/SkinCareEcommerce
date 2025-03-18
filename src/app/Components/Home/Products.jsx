@@ -45,7 +45,7 @@ const Products = () => {
                     <button
                         key={index}
                         onClick={() => handleCategoryClick(category)}
-                        className={`px-4 py-2 rounded-md font-semibold transition ${
+                        className={`px-4 py-2 rounded-md font-semibold transition cursor-pointer ${
                             selectedCategory === category ? 'bg-blue-600 text-white' : 'bg-gray-200'
                         }`}
                     >
@@ -54,12 +54,10 @@ const Products = () => {
                 ))}
             </div>
 
-            {/* Product List */}
             <div className="relative h-[500px] overflow-y-auto flex flex-wrap gap-4 p-4 border custom-scrollbar">
                 {filteredProducts.length > 0 ? (
                     filteredProducts.map((product) => (
                         <div key={product.id} className="w-[230px] p-4 border rounded-lg shadow-lg">
-                            {/* Product Image */}
                             <div className="w-full h-[200px] relative">
                                 <Image
                                     src={product.images?.[0] || '/fallback-image.png'}
@@ -70,7 +68,6 @@ const Products = () => {
                                 />
                             </div>
 
-                            {/* Product Details */}
                             <div className="mt-4">
                                 <h2 className="text-lg font-bold">{product.title}</h2>
                                 <p className="text-sm text-gray-500">{product.brand}</p>
