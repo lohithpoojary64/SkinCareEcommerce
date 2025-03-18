@@ -2,12 +2,15 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import { use } from 'react';
+import Link from 'next/link';
 
 const ProductDetails = ({ params }) => {
     const router = useRouter();
-    const { id } = params;
+    const { id } = use(params);
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [cart, setCart] = useState([]);
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -25,16 +28,24 @@ const ProductDetails = ({ params }) => {
         if (id) fetchProduct();
     }, [id]);
 
+    useEffect(() => {
+        const existingCart = JSON.parse(localStorage.getItem('cart')) || [];
+        setCart(existingCart);
+    }, []);
+
     const addToCart = () => {
+        if (!product) return;
+
         const existingCart = JSON.parse(localStorage.getItem('cart')) || [];
         const updatedCart = [...existingCart, product];
+
         localStorage.setItem('cart', JSON.stringify(updatedCart));
+        setCart(updatedCart);
+
         alert(`${product.title} added to cart!`);
     };
 
-
     if (loading) return <p className="text-center text-gray-500">Loading product details...</p>;
-
     if (!product) return <p className="text-center text-red-500">Product not found.</p>;
 
     return (
@@ -67,12 +78,19 @@ const ProductDetails = ({ params }) => {
                     <p className="text-xs text-gray-500">Discount: {product.discountPercentage}%</p>
 
                     {/* Add to Cart Button */}
+                    <button 
+                        onClick={addToCart} 
+                        className="mt-4 bg-blue-600 text-white px-6 py-2 rounded-md font-bold hover:bg-blue-700 transition"
+                    >
+                        Add to Cart 🛒
+                    </button>
+
+                    {/* View Cart Button */}
                     <Link href="/cart">
-                        <button className="bg-green-600 text-white px-4 py-2 rounded-md">
-                            View Cart 🛒
+                        <button className="mt-4 ml-4 bg-green-600 text-white px-4 py-2 rounded-md font-bold hover:bg-green-700 transition">
+                            View Cart 🛒 ({cart.length})
                         </button>
                     </Link>
-
                 </div>
             </div>
         </div>

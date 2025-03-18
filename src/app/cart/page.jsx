@@ -1,8 +1,11 @@
 'use client';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 const Cart = () => {
+
+    const router = useRouter();
     const [cart, setCart] = useState([]);
 
     useEffect(() => {
@@ -18,6 +21,8 @@ const Cart = () => {
 
     return (
         <div className="p-4">
+            <button onClick={() => router.push('/')} className="mb-4 px-4 py-2 bg-gray-300 rounded-md">Back</button>
+
             <h1 className="text-2xl font-bold mb-4">Shopping Cart 🛒</h1>
             {cart.length > 0 ? (
                 <div className="grid gap-4">
@@ -36,7 +41,7 @@ const Cart = () => {
                                 <h2 className="text-lg font-semibold">{product.title}</h2>
                                 <p className="text-gray-500">Price: ${product.price}</p>
                             </div>
-                            <button 
+                            <button
                                 onClick={() => removeFromCart(product.id)}
                                 className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition"
                             >
