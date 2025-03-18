@@ -8,8 +8,8 @@ const { Header } = Layout;
 
 const menuItems = [
   { key: "1", label: <Link href="/">Home</Link> },
-  { key: "2", label: <Link href="/about">About</Link> },
-  { key: "3", label: <Link href="/contact">Contact</Link> },
+  { key: "2", label: <Link href="/products">Products</Link> },
+  { key: "3", label: <Link href="/cart">Cart</Link> },
   { key: "4", label: <Link href="/login">Login</Link> },
 ];
 

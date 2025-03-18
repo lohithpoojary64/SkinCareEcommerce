@@ -11,7 +11,7 @@ const NewArrivals = () => {
     return (
         <div className="p-6">
             <h2 className="text-2xl font-bold mb-4">🆕 New Arrivals</h2>
-            <div className="flex gap-4 overflow-x-auto custom-scrollbar">
+            <div className="flex gap-4 justify-center overflow-x-auto custom-scrollbar">
                 {newArrivals.map((product) => (
                     <div key={product.id} className="w-[230px] p-4 border rounded-lg shadow-lg">
                         {/* Product Image */}

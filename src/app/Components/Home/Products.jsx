@@ -54,7 +54,7 @@ const Products = () => {
                 ))}
             </div>
 
-            <div className="relative h-[500px] overflow-y-auto flex flex-wrap gap-4 p-4 border custom-scrollbar">
+            <div className="relative h-[700px] overflow-y-auto flex flex-wrap justify-center gap-4 p-4 border rounded-2xl custom-scrollbar">
                 {filteredProducts.length > 0 ? (
                     filteredProducts.map((product) => (
                         <div key={product.id} className="w-[230px] p-4 border rounded-lg shadow-lg">
