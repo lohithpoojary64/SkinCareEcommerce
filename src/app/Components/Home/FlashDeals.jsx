@@ -34,7 +34,7 @@ const FlashDeals = () => {
 
     return (
         <div className="p-6">
-            <h2 className="text-2xl font-bold mb-4">🔥 Flash Deals</h2>
+            <h2 className="text-2xl font-bold mb-4 text-gray-300">🔥 Flash Deals</h2>
 
             {/* 🖥 Desktop Grid View */}
             <div className="hidden md:flex flex-wrap gap-4 justify-center">

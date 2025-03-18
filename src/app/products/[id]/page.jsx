@@ -50,7 +50,7 @@ const ProductDetails = ({ params }) => {
 
     return (
         <div className="p-4">
-            <button onClick={() => router.back()} className="mb-4 text-blue-600 underline">
+            <button onClick={() => router.back()} className="mb-4 text-gray-400 underline">
                 ← Back to Products
             </button>
 
@@ -68,7 +68,7 @@ const ProductDetails = ({ params }) => {
 
                 {/* Product Details */}
                 <div className="w-full md:w-1/2">
-                    <h1 className="text-3xl font-bold">{product.title}</h1>
+                    <h1 className="text-3xl font-bold text-gray-300">{product.title}</h1>
                     <p className="text-sm text-gray-500">{product.brand}</p>
                     <p className="text-xl font-semibold text-green-600">${product.price}</p>
                     <p className="text-md text-gray-700">{product.description}</p>

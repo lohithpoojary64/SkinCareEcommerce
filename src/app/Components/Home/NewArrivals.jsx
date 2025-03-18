@@ -12,7 +12,7 @@ const NewArrivals = () => {
 
     return (
         <div className="p-6">
-            <h2 className="text-2xl font-bold mb-4">🆕 New Arrivals</h2>
+            <h2 className="text-2xl font-bold mb-4 text-gray-300">🆕 New Arrivals</h2>
 
             {/* Desktop View: Grid Layout */}
             <div className="hidden md:flex gap-4 justify-center overflow-x-auto custom-scrollbar">
