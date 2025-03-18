@@ -2,9 +2,16 @@
 import React, { useState } from "react";
 import { Layout, Menu, Drawer, Button } from "antd";
 import { MenuOutlined } from "@ant-design/icons";
-import Link from "next/link"; 
+import Link from "next/link";
 
 const { Header } = Layout;
+
+const menuItems = [
+  { key: "1", label: <Link href="/">Home</Link> },
+  { key: "2", label: <Link href="/about">About</Link> },
+  { key: "3", label: <Link href="/contact">Contact</Link> },
+  { key: "4", label: <Link href="/login">Login</Link> },
+];
 
 const Navbar = () => {
   const [visible, setVisible] = useState(false);
@@ -21,20 +28,8 @@ const Navbar = () => {
           mode="horizontal"
           className="hidden md:flex bg-transparent"
           defaultSelectedKeys={["1"]}
-        >
-          <Menu.Item key="1">
-            <Link href="/">Home</Link>
-          </Menu.Item>
-          <Menu.Item key="2">
-            <Link href="/about">About</Link>
-          </Menu.Item>
-          <Menu.Item key="3">
-            <Link href="/contact">Contact</Link>
-          </Menu.Item>
-          <Menu.Item key="4">
-            <Link href="/login">Login</Link>
-          </Menu.Item>
-        </Menu>
+          items={menuItems} // ✅ Fixed: Using items prop
+        />
 
         <Button
           className="md:hidden text-white"
@@ -49,20 +44,7 @@ const Navbar = () => {
           onClose={() => setVisible(false)}
           open={visible}
         >
-          <Menu mode="vertical">
-            <Menu.Item key="1">
-              <Link href="/">Home</Link>
-            </Menu.Item>
-            <Menu.Item key="2">
-              <Link href="/about">About</Link>
-            </Menu.Item>
-            <Menu.Item key="3">
-              <Link href="/contact">Contact</Link>
-            </Menu.Item>
-            <Menu.Item key="4">
-              <Link href="/login">Login</Link>
-            </Menu.Item>
-          </Menu>
+          <Menu mode="vertical" items={menuItems} /> 
         </Drawer>
       </Header>
     </Layout>
