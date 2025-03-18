@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const Products = () => {
     const [data, setData] = useState([]);
@@ -57,27 +58,29 @@ const Products = () => {
             <div className="relative h-[700px] overflow-y-auto flex flex-wrap justify-center gap-4 p-4 border rounded-2xl custom-scrollbar">
                 {filteredProducts.length > 0 ? (
                     filteredProducts.map((product) => (
-                        <div key={product.id} className="w-[230px] p-4 border rounded-lg shadow-lg">
-                            <div className="w-full h-[200px] relative">
-                                <Image
-                                    src={product.images?.[0] || '/fallback-image.png'}
-                                    layout="fill"
-                                    objectFit="contain"
-                                    alt={product.title}
-                                    className="rounded-lg"
-                                />
-                            </div>
+                        <Link href={`/products/${product.id}`} key={product.id}>
+                            <div className="w-[230px] p-4 border rounded-lg shadow-lg cursor-pointer hover:shadow-xl transition">
+                                <div className="w-full h-[200px] relative">
+                                    <Image
+                                        src={product.images?.[0] || '/fallback-image.png'}
+                                        layout="fill"
+                                        objectFit="contain"
+                                        alt={product.title}
+                                        className="rounded-lg"
+                                    />
+                                </div>
 
-                            <div className="mt-4">
-                                <h2 className="text-lg font-bold">{product.title}</h2>
-                                <p className="text-sm text-gray-500">{product.brand}</p>
-                                <p className="text-md font-semibold text-green-600">${product.price}</p>
-                                <p className="text-xs text-gray-500">Stock: {product.stock}</p>
-                                <p className="text-xs text-gray-500">Category: {product.category}</p>
-                                <p className="text-xs text-gray-500">Rating: ⭐{product.rating}</p>
-                                <p className="text-xs text-gray-500">Discount: {product.discountPercentage}%</p>
+                                <div className="mt-4">
+                                    <h2 className="text-lg font-bold">{product.title}</h2>
+                                    <p className="text-sm text-gray-500">{product.brand}</p>
+                                    <p className="text-md font-semibold text-green-600">${product.price}</p>
+                                    <p className="text-xs text-gray-500">Stock: {product.stock}</p>
+                                    <p className="text-xs text-gray-500">Category: {product.category}</p>
+                                    <p className="text-xs text-gray-500">Rating: ⭐{product.rating}</p>
+                                    <p className="text-xs text-gray-500">Discount: {product.discountPercentage}%</p>
+                                </div>
                             </div>
-                        </div>
+                        </Link>
                     ))
                 ) : (
                     <p>No products found for this category.</p>

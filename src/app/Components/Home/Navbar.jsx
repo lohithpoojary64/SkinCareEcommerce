@@ -20,7 +20,7 @@ const Navbar = () => {
     <Layout>
       <Header className="flex justify-between items-center bg-blue-600 px-6">
         <div className="text-white text-lg font-bold">
-          <Link href="/">CureSkin</Link>
+          <Link href="/">NextGenStore</Link>
         </div>
 
         <Menu
