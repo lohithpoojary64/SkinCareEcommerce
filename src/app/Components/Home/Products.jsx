@@ -4,6 +4,9 @@ import Image from 'next/image';
 
 const Products = () => {
     const [data, setData] = useState([]);
+    const [categories, setCategories] = useState([]);
+    const [filteredProducts, setFilteredProducts] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState('All');
 
     useEffect(() => {
         const fetchData = async () => {
@@ -11,51 +14,78 @@ const Products = () => {
                 const response = await fetch('https://dummyjson.com/products');
                 const result = await response.json();
                 console.log('Response is', result);
-                setData(result.products); 
+
+                setData(result.products);
+                setFilteredProducts(result.products);
+
+                const uniqueCategories = ['All', ...new Set(result.products.map(p => p.category))];
+                setCategories(uniqueCategories);
             } catch (error) {
-                console.log('Error while fetching data in Product component', error);
+                console.log('Error while fetching data', error);
             }
         };
 
         fetchData();
     }, []);
 
-    return (
-        <div className='relative w-full flex flex-wrap gap-4 p-4'>
-            {data.length > 0 ? (
-                data.map((product) => (
-                    <div key={product.id} className='w-[250px] p-4 border rounded-lg shadow-lg'>
-                        {/* Product Image */}
-                        <div className='w-full h-[200px] relative'>
-                            <Image
-                                src={product.images?.[0] || '/fallback-image.png'} // Corrected image access
-                                layout='fill'
-                                objectFit='contain'
-                                alt={product.title}
-                                className='rounded-lg'
-                            />
-                        </div>
+    // Handle category selection
+    const handleCategoryClick = (category) => {
+        setSelectedCategory(category);
+        if (category === 'All') {
+            setFilteredProducts(data);
+        } else {
+            setFilteredProducts(data.filter(product => product.category === category));
+        }
+    };
 
-                        {/* Product Details */}
-                        <div className='mt-4'>
-                            <h2 className='text-lg font-bold'>{product.title}</h2>
-                            <p className='text-sm text-gray-500'>{product.brand}</p>
-                            <p className='text-md font-semibold text-green-600'>${product.price}</p>
-                            <p className='text-xs text-gray-500'>Stock: {product.stock} ({product.availabilityStatus})</p>
-                            <p className='text-xs text-gray-500'>Category: {product.category}</p>
-                            <p className='text-xs text-gray-500'>Rating: ⭐{product.rating}</p>
-                            <p className='text-xs text-gray-500'>SKU: {product.sku}</p>
-                            <p className='text-xs text-gray-500'>Discount: {product.discountPercentage}%</p>
-                            <p className='text-xs text-gray-500'>Min Order: {product.minimumOrderQuantity}</p>
-                            <p className='text-xs text-gray-500'>Return Policy: {product.returnPolicy}</p>
-                            <p className='text-xs text-gray-500'>Shipping: {product.shippingInformation}</p>
-                            <p className='text-xs text-gray-500'>Warranty: {product.warrantyInformation}</p>
+    return (
+        <div className="p-4">
+            <div className="flex gap-4 overflow-x-auto p-2 mb-4 custom-scrollbar">
+                {categories.map((category, index) => (
+                    <button
+                        key={index}
+                        onClick={() => handleCategoryClick(category)}
+                        className={`px-4 py-2 rounded-md font-semibold transition ${
+                            selectedCategory === category ? 'bg-blue-600 text-white' : 'bg-gray-200'
+                        }`}
+                    >
+                        {category}
+                    </button>
+                ))}
+            </div>
+
+            {/* Product List */}
+            <div className="relative h-[500px] overflow-y-auto flex flex-wrap gap-4 p-4 border custom-scrollbar">
+                {filteredProducts.length > 0 ? (
+                    filteredProducts.map((product) => (
+                        <div key={product.id} className="w-[230px] p-4 border rounded-lg shadow-lg">
+                            {/* Product Image */}
+                            <div className="w-full h-[200px] relative">
+                                <Image
+                                    src={product.images?.[0] || '/fallback-image.png'}
+                                    layout="fill"
+                                    objectFit="contain"
+                                    alt={product.title}
+                                    className="rounded-lg"
+                                />
+                            </div>
+
+                            {/* Product Details */}
+                            <div className="mt-4">
+                                <h2 className="text-lg font-bold">{product.title}</h2>
+                                <p className="text-sm text-gray-500">{product.brand}</p>
+                                <p className="text-md font-semibold text-green-600">${product.price}</p>
+                                <p className="text-xs text-gray-500">Stock: {product.stock}</p>
+                                <p className="text-xs text-gray-500">Category: {product.category}</p>
+                                <p className="text-xs text-gray-500">Rating: ⭐{product.rating}</p>
+                                <p className="text-xs text-gray-500">Discount: {product.discountPercentage}%</p>
+                            </div>
                         </div>
-                    </div>
-                ))
-            ) : (
-                <p>Loading products...</p>
-            )}
+                    ))
+                ) : (
+                    <p>No products found for this category.</p>
+                )}
+            </div>
         </div>
     );
 };
