@@ -4,10 +4,13 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { use } from 'react';
 import Link from 'next/link';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ProductDetails = ({ params }) => {
     const router = useRouter();
-    const { id } = use(params);
+    const { id } = use(params); // Unwrap params using React's use()
+
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
     const [cart, setCart] = useState([]);
@@ -33,18 +36,32 @@ const ProductDetails = ({ params }) => {
         setCart(existingCart);
     }, []);
 
-    const addToCart = () => {
-        if (!product) return;
-
-        const existingCart = JSON.parse(localStorage.getItem('cart')) || [];
-        const updatedCart = [...existingCart, product];
-
-        localStorage.setItem('cart', JSON.stringify(updatedCart));
-        setCart(updatedCart);
-
-        alert(`${product.title} added to cart!`);
+    const addToCart = (product) => {
+        const storedCart = JSON.parse(localStorage.getItem('cart')) || [];
+    
+        const existingProduct = storedCart.find(item => item.id === product.id);
+    
+        if (existingProduct) {
+            const updatedCart = storedCart.map(item =>
+                item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+            );
+            localStorage.setItem('cart', JSON.stringify(updatedCart));
+            toast.info('Quantity updated in cart!');
+        } else {
+            const sanitizedProduct = {
+                id: product.id,
+                title: product.title,
+                price: product.price,
+                images: product.images,
+                quantity: 1
+            };
+    
+            const updatedCart = [...storedCart, sanitizedProduct];
+            localStorage.setItem('cart', JSON.stringify(updatedCart));
+            toast.success('Item added to cart!');
+        }
     };
-
+    
     if (loading) return <p className="text-center text-gray-500">Loading product details...</p>;
     if (!product) return <p className="text-center text-red-500">Product not found.</p>;
 
@@ -55,18 +72,16 @@ const ProductDetails = ({ params }) => {
             </button>
 
             <div className="flex flex-col md:flex-row gap-6">
-                {/* Product Image */}
                 <div className="w-full md:w-1/2 relative h-[400px]">
                     <Image
                         src={product.images?.[0] || '/fallback-image.png'}
                         layout="fill"
                         objectFit="contain"
-                        alt={product.title}
+                        alt={product.title || 'Product image'}
                         className="rounded-lg"
                     />
                 </div>
 
-                {/* Product Details */}
                 <div className="w-full md:w-1/2">
                     <h1 className="text-3xl font-bold text-gray-300">{product.title}</h1>
                     <p className="text-sm text-gray-500">{product.brand}</p>
@@ -77,15 +92,13 @@ const ProductDetails = ({ params }) => {
                     <p className="text-xs text-gray-500">Rating: ⭐{product.rating}</p>
                     <p className="text-xs text-gray-500">Discount: {product.discountPercentage}%</p>
 
-                    {/* Add to Cart Button */}
                     <button 
-                        onClick={addToCart} 
+                        onClick={() => addToCart(product)} 
                         className="mt-4 bg-blue-600 text-white px-6 py-2 rounded-md font-bold hover:bg-blue-700 transition"
                     >
                         Add to Cart 🛒
                     </button>
 
-                    {/* View Cart Button */}
                     <Link href="/cart">
                         <button className="mt-4 ml-4 bg-green-600 text-white px-4 py-2 rounded-md font-bold hover:bg-green-700 transition">
                             View Cart 🛒 ({cart.length})

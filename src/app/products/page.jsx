@@ -79,7 +79,7 @@ const Products = () => {
                         key={index}
                         onClick={() => handleCategoryClick(category)}
                         className={`px-4 py-2 rounded-md font-semibold transition cursor-pointer ${
-                            selectedCategory === category ? 'bg-blue-600 text-white' : 'bg-gray-400'
+                            selectedCategory === category ? 'bg-blue-600 text-white' : 'bg-gray-300'
                         }`}
                     >
                         {category}
