@@ -4,6 +4,7 @@ import Header from '../Components/Home/Header.jsx'
 import NewArrivals from '../Components/Home/NewArrivals.jsx'
 import FlashDeals from '../Components/Home/FlashDeals.jsx';
 import Products from '../Components/Home/Products.jsx';
+import Footer from '../Components/Home/Footer.jsx';
 
 const Home = () => {
     return (
@@ -13,6 +14,7 @@ const Home = () => {
             <Products/>
             <NewArrivals/>
             <FlashDeals/>
+            <Footer/>
         </div>
     )
 }
